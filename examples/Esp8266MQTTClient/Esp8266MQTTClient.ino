@@ -6,7 +6,7 @@ void onConnectionEstablished();
 EspMQTTClient client(
   "ssid",                 // Wifi ssid
   "pass",                 // Wifi password
-  onConnectionEstablished,// Connection established callback
+  onConnectionEstablished,// MQTT Connection established callback
   "ip",                   // MQTT broker ip
   1883,                   // MQTT broker port
   "mqttusr",              // MQTT username
@@ -24,13 +24,11 @@ EspMQTTClient client(
   "ip"                    // MQTT broker ip
 );
 
-void setup()
-{
+void setup() {
   Serial.begin(115200);
 }
 
-void onConnectionEstablished()
-{
+void onConnectionEstablished() {
   // Subscribe to "mytopic/test" and display received message to Serial
   client.subscribe("mytopic/test", [](const String & payload) {
     Serial.println(payload);
@@ -45,7 +43,6 @@ void onConnectionEstablished()
   });
 }
 
-void loop()
-{
+void loop() {
   client.loop();
 }

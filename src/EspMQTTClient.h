@@ -23,7 +23,7 @@ private:
   unsigned long mLastWifiConnectionSuccessMillis;
   bool mMqttConnected;
   unsigned long mLastMqttConnectionMillis;
-	
+
   const char* mWifiSsid;
   const char* mWifiPassword;
 
@@ -50,7 +50,7 @@ private:
   };
   TopicSubscription mTopicSubscriptionList[MAX_TOPIC_SUBSCRIPTION_LIST_SIZE];
   byte mTopicSubscriptionListSize;
-	
+
   struct DelayedExecutionRecord {
     unsigned long targetMillis;
     DelayedExecutionCallback callback;
@@ -71,10 +71,10 @@ public:
 
   void publish(const String &topic, const String &payload, bool retain = false);
   void subscribe(const String &topic, MessageReceivedCallback messageReceivedCallback);
-	
+
   //Unsubscribes from the topic, if it exists, and removes it from the CallbackList.
   void unsubscribe(const String &topic);
-	
+
   void executeDelayed(const long delay, DelayedExecutionCallback callback);
 
 private:
