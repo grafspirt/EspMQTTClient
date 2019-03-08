@@ -7,10 +7,10 @@
 #include <ESP8266mDNS.h>
 #include <ESP8266HTTPUpdateServer.h>
 
-#define MAX_TOPIC_SUBSCRIPTION_LIST_SIZE 10
-#define MAX_DELAYED_EXECUTION_LIST_SIZE 10
-#define MAX_MQTT_PAYLOAD_SIZE 256 // Maximum payload size, must correspond to MQTT_MAX_PACKET_SIZE of PubSubClient.h
-#define CONNECTION_RETRY_DELAY 10 * 1000
+#define MQTT_MAX_PAYLOAD_SIZE                 256 // Maximum payload size, must correspond to MQTT_MAX_PACKET_SIZE of PubSubClient.h
+#define MQTT_CONNECTION_RETRY_DELAY           10 * 1000
+#define MQTT_MAX_TOPIC_SUBSCRIPTION_LIST_SIZE 10
+#define MAX_DELAYED_EXECUTION_LIST_SIZE       10
 
 typedef void(*ConnectionEstablishedCallback) ();
 typedef void(*MessageReceivedCallback) (const String &message);
@@ -48,7 +48,7 @@ private:
     String topic;
     MessageReceivedCallback callback;
   };
-  TopicSubscription mTopicSubscriptionList[MAX_TOPIC_SUBSCRIPTION_LIST_SIZE];
+  TopicSubscription mTopicSubscriptionList[MQTT_MAX_TOPIC_SUBSCRIPTION_LIST_SIZE];
   byte mTopicSubscriptionListSize;
 
   struct DelayedExecutionRecord {
