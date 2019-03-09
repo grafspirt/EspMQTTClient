@@ -44,11 +44,11 @@ private:
   WiFiClient* mWifiClient;
   PubSubClient* mMqttClient;
 
-  struct TopicSubscription {
+  struct TopicSubscriptionRecord {
     String topic;
     MessageReceivedCallback callback;
   };
-  TopicSubscription mTopicSubscriptionList[MQTT_MAX_TOPIC_SUBSCRIPTION_LIST_SIZE];
+  TopicSubscriptionRecord mTopicSubscriptionList[MQTT_MAX_TOPIC_SUBSCRIPTION_LIST_SIZE];
   byte mTopicSubscriptionListSize;
 
   struct DelayedExecutionRecord {
@@ -63,18 +63,25 @@ public:
     const char wifiSsid[], const char* wifiPassword,
     ConnectionEstablishedCallback connectionEstablishedCallback, const char* mqttServerIp, const short mqttServerPort = 1883,
     const char* mqttUsername = "", const char* mqttPassword = "", const char* mqttClientName = "ESP8266",
-    const bool enableWebUpdater = true, const bool enableSerialLogs = true);
+#ifdef ESPMQTTCLIENT_WEB_AND_LOGS_OFF_BY_DEFAULT
+      const bool enableWebUpdater = false, const bool enableSerialLogs = false);
+#elif defined ESPMQTTCLIENT_WEB_OFF_BY_DEFAULT
+      const bool enableWebUpdater = false, const bool enableSerialLogs = true);
+#else
+      const bool enableWebUpdater = true, const bool enableSerialLogs = true);
+#endif
   ~EspMQTTClient();
 
+  // Main routine
   void loop();
   bool isConnected() const;
 
-  void publish(const String &topic, const String &payload, bool retain = false);
-  void subscribe(const String &topic, MessageReceivedCallback messageReceivedCallback);
+  // MQTT interface
+  void publish(const String &topic, const String &payload, bool retain = false);  // Sends the string to the topic
+  void subscribe(const String &topic, MessageReceivedCallback messageReceivedCallback); // Subscribes to the topic and registers the callback
+  void unsubscribe(const String &topic);  //Unsubscribes from the topic and removes the callback from the list
 
-  //Unsubscribes from the topic, if it exists, and removes it from the CallbackList.
-  void unsubscribe(const String &topic);
-
+  // Delayed functions
   void executeDelayed(const long delay, DelayedExecutionCallback callback);
 
 private:

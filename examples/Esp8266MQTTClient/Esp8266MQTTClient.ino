@@ -1,3 +1,7 @@
+// Switching WebUpdater/Logs functionality default off
+//#define ESPMQTTCLIENT_WEB_OFF_BY_DEFAULT
+//#define ESPMQTTCLIENT_WEB_AND_LOGS_OFF_BY_DEFAULT
+
 #include "EspMQTTClient.h"
 
 void onConnectionEstablished();
