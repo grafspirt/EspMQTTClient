@@ -44,11 +44,11 @@ private:
   WiFiClient* mWifiClient;
   PubSubClient* mMqttClient;
 
-  struct TopicSubscription {
+  struct TopicSubscriptionRecord {
     String topic;
     MessageReceivedCallback callback;
   };
-  TopicSubscription mTopicSubscriptionList[MQTT_MAX_TOPIC_SUBSCRIPTION_LIST_SIZE];
+  TopicSubscriptionRecord mTopicSubscriptionList[MQTT_MAX_TOPIC_SUBSCRIPTION_LIST_SIZE];
   byte mTopicSubscriptionListSize;
 
   struct DelayedExecutionRecord {
@@ -66,15 +66,16 @@ public:
     const bool enableWebUpdater = true, const bool enableSerialLogs = true);
   ~EspMQTTClient();
 
+  // Main routine
   void loop();
   bool isConnected() const;
 
-  void publish(const String &topic, const String &payload, bool retain = false);
-  void subscribe(const String &topic, MessageReceivedCallback messageReceivedCallback);
+  // MQTT interface
+  void publish(const String &topic, const String &payload, bool retain = false);  // Sends the string to the topic
+  void subscribe(const String &topic, MessageReceivedCallback messageReceivedCallback); // Subscribes to the topic and registers the callback
+  void unsubscribe(const String &topic);  //Unsubscribes from the topic and removes the callback from the list
 
-  //Unsubscribes from the topic, if it exists, and removes it from the CallbackList.
-  void unsubscribe(const String &topic);
-
+  // Delayed functions
   void executeDelayed(const long delay, DelayedExecutionCallback callback);
 
 private:
